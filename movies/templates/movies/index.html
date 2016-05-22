@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Movies
+</title>
+</head>
+<body>
+  {% load static %}
+  {% for m in data %}
+  <h3>{{m.title}}</h3>
+  <p>{{m.pk}}.jpg</p>
+  <p>{{m.director}}</p>
+  <p>Year:{{m.year}}</p>
+  <p>Tomatometer:{{m.tomatometer}}</p>
+  <!-- <img src="{% static 'movies/{{m.pk}}.jpg' %}" height="250px"/> -->
+  <img src= "{% static "" %}movies/{{m.pk}}.jpg" height="250px">
+  <!-- <img src="{{m.poster_url}}"> -->
+  <hr>
+  {% endfor %}
+</body>
+</html>
