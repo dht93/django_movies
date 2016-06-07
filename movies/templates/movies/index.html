@@ -1,8 +1,9 @@
 {% extends 'movies/base.html'%}
 
 {% block body%}
+{% load static%}
   <div class = "container" align="center">
-  {% load static %}
+
   <!-- <div class="panel panel-default">
   <table class="table">
     <tr>
@@ -55,22 +56,22 @@
           <td colspan="2">{{m.year}}</td>
         </tr>
         <tr>
-          <td colspan="2">{{m.tomatometer}}</td>
+          <td colspan="2">Tomato: {{m.tomatometer}}</td>
         </tr>
 
     <tr>
       <td>
         {% if m.seen_status %}
-        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-success">Seen</button>
+        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-success"><span class="octicon octicon-check"></span></button>
         {% else %}
-        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-warning">Not Seen</button>
+        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-warning"><span class="octicon octicon-lock"></span></button>
         {% endif%}
       </td>
       <td>
         {% if m.bookmarked %}
-        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-success">B</button>
+        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-success"><span class="octicon octicon-checklist"></span></button>
         {% else %}
-        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-warning">NB</button>
+        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-warning"><span class="octicon octicon-star"></span></button>
         {% endif%}
       </td>
     </tr>
@@ -98,10 +99,10 @@
       csrfmiddlewaretoken : '{{csrf_token}}' });
       $(this).toggleClass('btn-success');
       $(this).toggleClass('btn-warning');
-      if ($(this).text()=='Seen')
-        $(this).text('Not Seen');
+      if ($(this).html()=='<span class="octicon octicon-check"></span>')
+        $(this).html('<span class="octicon octicon-lock"></span>');
       else {
-        $(this).text('Seen');
+        $(this).html('<span class="octicon octicon-check"></span>');
       }
       });
     $(document).on('click','.book-status',function(){
@@ -111,10 +112,10 @@
       csrfmiddlewaretoken : '{{csrf_token}}' });
       $(this).toggleClass('btn-success');
       $(this).toggleClass('btn-warning');
-      if ($(this).text()=='B')
-        $(this).text('NB');
+      if ($(this).html()=='<span class="octicon octicon-checklist"></span>')
+        $(this).html('<span class="octicon octicon-star"></span>');
       else {
-        $(this).text('B');
+        $(this).html('<span class="octicon octicon-checklist"></span>');
       }
       });
 

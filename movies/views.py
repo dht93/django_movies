@@ -4,20 +4,20 @@ import sqlite3
 from django.http import HttpResponse
 
 def index(request):
-    data = Movie.objects.all()[:100]
+    data = Movie.objects.all().order_by('-tomatometer')[:100]
     # print data
     return render(request,'movies/index.html',{'data':data})
 
 def bookmarked(request):
-    data = Movie.objects.filter(bookmarked = True)
+    data = Movie.objects.filter(bookmarked = True).order_by('-tomatometer')
     return render(request, 'movies/index.html',{'data':data})
 
 def seen_movies(request):
-    data = Movie.objects.filter(seen_status = True)
+    data = Movie.objects.filter(seen_status = True).order_by('-tomatometer')
     return render(request, 'movies/index.html',{'data':data})
 
 def unseen_movies(request):
-    data = Movie.objects.filter(seen_status = False)
+    data = Movie.objects.filter(seen_status = False).order_by('-tomatometer')
     return render(request, 'movies/index.html',{'data':data})
 
 def change_seen_status(request):
