@@ -4,9 +4,23 @@ import sqlite3
 from django.http import HttpResponse
 # Create your views here.
 def index(request):
-    data = Movie.objects.all()[:20]
+    data = Movie.objects.all()[:100]
     # print data
     return render(request,'movies/index.html',{'data':data})
+
+def change_seen_status(request):
+    id_to_change = request.POST['id']
+    pk = id_to_change.split('-')[1]
+    print id_to_change
+    m = Movie.objects.get(pk = int(pk))
+    if m.seen_status == True:
+        m.seen_status = False
+    else:
+        m.seen_status = True
+    m.save()
+    # print m.title
+    return HttpResponse("done")
+
 def add_data(request):
     conn = sqlite3.connect('movies_with_data1.sqlite')
     cur = conn.cursor()
