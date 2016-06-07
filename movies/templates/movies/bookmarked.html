@@ -1,46 +1,11 @@
 {% extends 'movies/base.html'%}
 
 {% block body%}
+  <br>
   <div class = "container" align="center">
   {% load static %}
-  <!-- <div class="panel panel-default">
-  <table class="table">
-    <tr>
-      <td>S.No.</td>
-      <td>Movie</td>
-      <td>Director</td>
-      <td>Year</td>
-      <td>Tomatometer</td>
-    </tr>
-  </table>
-</div> -->
+
   {% for m in data %}
-
-  <!-- <div class="media">
-    <div class="media-left">
-      <a href="#">
-        <img class="media-object" src= "{% static "" %}movies/{{m.pk}}.jpg" alt={{m.title}} height="150px">
-      </a>
-    </div>
-    <div class="media-body">
-      <h4 class="media-heading">{{m.title}}</h4>
-      <div>
-        <div style="display:inline">
-      <p>Directed by: {{m.director}}<p>
-      <p>Released year: {{m.year}}</p>
-      <p>Genre: {{m.genre}}</p>
-      <p>tomatometer: {{m.tomatometer}}</p>
-      <p>Imdb Rating: {{m.imdb_rating}}</p>
-        {% if m.seen_status %}
-        <button style="display:inline;" id="btn-{{m.pk}}" type="button" class="seen-status btn btn-success">Seen</button>
-        {% else %}
-        <button style="display:inline;" id="btn-{{m.pk}}" type="button" class="seen-status btn btn-warning">Not Seen</button>
-        {% endif%}
-      </div>
-      </div>
-    </div>
-  </div> -->
-
 
   <div class="panel panel-default" style="display:inline-block;width:35%">
   <table class="table">
@@ -77,13 +42,6 @@
   </table>
 </div>
 
-
-  <!-- <h3>{{m.title}}</h3>
-  <p>{{m.pk}}.jpg</p>
-  <p>{{m.director}}</p>
-  <p>Year:{{m.year}}</p>
-  <p>Tomatometer:{{m.tomatometer}}</p>
-  <img src= "{% static "" %}movies/{{m.pk}}.jpg" height="250px"> -->
   {% endfor %}
 
 
