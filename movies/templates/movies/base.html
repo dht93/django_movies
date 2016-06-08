@@ -7,10 +7,11 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 {% load static%}
 <link rel="stylesheet" href="{% static 'movies/octicons/octicons.css'%}">
+<link rel="stylesheet" href="{% static 'movies/css/style.css'%}">
 <link rel="shortcut icon" href="{%  static 'movies/favicon/favicon.ico' %}">
 </head>
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -25,9 +26,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href= "{% url 'seen_movies' %}" >Seen</a></li>
-        <li><a href= "{% url 'unseen_movies' %}" >Unseen</a></li>
-        <li><a href= "{% url 'bookmarked' %}" >Bookmarked</a></li>
+        <li {% if current == 'seen' %}class="active"{% endif%}><a href= "{% url 'seen_movies' %}" >Seen</a></li>
+        <li {% if current == 'unseen' %}class="active"{% endif%}><a href= "{% url 'unseen_movies' %}" >Unseen</a></li>
+        <li {% if current == 'bookmarked' %}class="active"{% endif%}><a href= "{% url 'bookmarked' %}" >Bookmarked</a></li>
 
       </ul>
     </div><!-- /.navbar-collapse -->
