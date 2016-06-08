@@ -1,11 +1,18 @@
-from django.shortcuts import render
-from .models import Movie
+from django.shortcuts import render, redirect
+from .models import Movie, Preferences
 import sqlite3
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def index(request):
-    data_objs = Movie.objects.all().order_by('-tomatometer')
+    m = Preferences.objects.get(pk=1)
+    # print m.sort_by
+    if m.sort_by == "imdb":
+        data_objs = Movie.objects.all().order_by('-imdb_rating')
+    elif m.sort_by == "year":
+        data_objs = Movie.objects.all().order_by('year')
+    else:
+        data_objs = Movie.objects.all().order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
     page = request.GET.get('page')
     # print page
@@ -18,10 +25,16 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
     # print data
-    return render(request,'movies/index.html',{'data':data,'current':'home'})
+    return render(request,'movies/index.html',{'data':data,'current':'home', 'sort_by':m.sort_by})
 
 def bookmarked(request):
-    data_objs = Movie.objects.filter(bookmarked = True).order_by('-tomatometer')
+    m = Preferences.objects.get(pk=1)
+    if m.sort_by == "imdb":
+        data_objs = Movie.objects.filter(bookmarked = True).order_by('-imdb')
+    elif m.sort_by == "year":
+        data_objs = Movie.objects.filter(bookmarked = True).order_by('year')
+    else:
+        data_objs = Movie.objects.filter(bookmarked = True).order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
     page = request.GET.get('page')
     try:
@@ -32,10 +45,16 @@ def bookmarked(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
-    return render(request, 'movies/index.html',{'data':data,'current':'bookmarked'})
+    return render(request, 'movies/index.html',{'data':data,'current':'bookmarked', 'sort_by':m.sort_by})
 
 def seen_movies(request):
-    data_objs = Movie.objects.filter(seen_status = True).order_by('-tomatometer')
+    m = Preferences.objects.get(pk=1)
+    if m.sort_by == "imdb":
+        data_objs = Movie.objects.filter(seen_status = True).order_by('-imdb')
+    elif m.sort_by == "year":
+        data_objs = Movie.objects.filter(seen_status = True).order_by('year')
+    else:
+        data_objs = Movie.objects.filter(seen_status = True).order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
     page = request.GET.get('page')
     try:
@@ -46,10 +65,16 @@ def seen_movies(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
-    return render(request, 'movies/index.html',{'data':data,'current':'seen'})
+    return render(request, 'movies/index.html',{'data':data,'current':'seen', 'sort_by':m.sort_by})
 
 def unseen_movies(request):
-    data_objs = Movie.objects.filter(seen_status = False).order_by('-tomatometer')
+    m = Preferences.objects.get(pk=1)
+    if m.sort_by == "imdb":
+        data_objs = Movie.objects.filter(seen_status = False).order_by('-imdb')
+    elif m.sort_by == "year":
+        data_objs = Movie.objects.filter(seen_status = False).order_by('year')
+    else:
+        data_objs = Movie.objects.filter(seen_status = False).order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
     page = request.GET.get('page')
     try:
@@ -60,7 +85,7 @@ def unseen_movies(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
-    return render(request, 'movies/index.html',{'data':data,'current':'unseen'})
+    return render(request, 'movies/index.html',{'data':data,'current':'unseen', 'sort_by':m.sort_by})
 
 def change_seen_status(request):
     id_to_change = request.POST['id']
@@ -111,11 +136,21 @@ def change_info(request):
     director = request.POST['director']
     year = request.POST['year']
     tomato = request.POST['tomato']
+    imdb = request.POST['imdb']
     # print id1,title,director,year,tomato
     m = Movie.objects.get(pk=int(id1))
     m.title = title
     m.director = director
     m.year = int(year)
     m.tomatometer = int(tomato)
+    m.imdb_rating = float(imdb)
     m.save()
     return HttpResponse('Done')
+
+def change_sort_by(request):
+    sort_by = request.GET['sort_by']
+    print sort_by
+    p = Preferences.objects.get(pk=1)
+    p.sort_by = sort_by
+    p.save()
+    return redirect('index')

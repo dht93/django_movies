@@ -15,3 +15,6 @@ class Movie(models.Model):
     bookmarked = models.BooleanField(default=False)
     def __unicode__(self):
         return self.title
+
+class Preferences(models.Model):
+    sort_by = models.CharField(max_length=10)

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Movies
+  <title>{{data.number}}
 </title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 {% load static%}
@@ -29,6 +29,19 @@
         <li {% if current == 'seen' %}class="active"{% endif%}><a href= "{% url 'seen_movies' %}" >Seen</a></li>
         <li {% if current == 'unseen' %}class="active"{% endif%}><a href= "{% url 'unseen_movies' %}" >Unseen</a></li>
         <li {% if current == 'bookmarked' %}class="active"{% endif%}><a href= "{% url 'bookmarked' %}" >Bookmarked</a></li>
+
+        <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort By <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=tomato">Tomato{% if sort_by == 'tomato' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=imdb">Imdb{% if sort_by == 'imdb' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=year">Year{% if sort_by == 'year' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <!-- <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">One more separated link</a></li> -->
+                  </ul>
+                </li>
 
       </ul>
     </div><!-- /.navbar-collapse -->
