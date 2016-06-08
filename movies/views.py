@@ -2,22 +2,64 @@ from django.shortcuts import render
 from .models import Movie
 import sqlite3
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def index(request):
-    data = Movie.objects.all().order_by('-tomatometer')[:100]
+    data_objs = Movie.objects.all().order_by('-tomatometer')
+    paginator = Paginator(data_objs, 20)
+    page = request.GET.get('page')
+    # print page
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        data = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        data = paginator.page(paginator.num_pages)
     # print data
     return render(request,'movies/index.html',{'data':data,'current':'home'})
 
 def bookmarked(request):
-    data = Movie.objects.filter(bookmarked = True).order_by('-tomatometer')
+    data_objs = Movie.objects.filter(bookmarked = True).order_by('-tomatometer')
+    paginator = Paginator(data_objs, 20)
+    page = request.GET.get('page')
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        data = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        data = paginator.page(paginator.num_pages)
     return render(request, 'movies/index.html',{'data':data,'current':'bookmarked'})
 
 def seen_movies(request):
-    data = Movie.objects.filter(seen_status = True).order_by('-tomatometer')
+    data_objs = Movie.objects.filter(seen_status = True).order_by('-tomatometer')
+    paginator = Paginator(data_objs, 20)
+    page = request.GET.get('page')
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        data = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        data = paginator.page(paginator.num_pages)
     return render(request, 'movies/index.html',{'data':data,'current':'seen'})
 
 def unseen_movies(request):
-    data = Movie.objects.filter(seen_status = False).order_by('-tomatometer')
+    data_objs = Movie.objects.filter(seen_status = False).order_by('-tomatometer')
+    paginator = Paginator(data_objs, 20)
+    page = request.GET.get('page')
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        data = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        data = paginator.page(paginator.num_pages)
     return render(request, 'movies/index.html',{'data':data,'current':'unseen'})
 
 def change_seen_status(request):
