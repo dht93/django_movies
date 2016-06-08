@@ -4,96 +4,104 @@
 {% load static%}
   <div class = "container" align="center">
 
-  <!-- <div class="panel panel-default">
-  <table class="table">
-    <tr>
-      <td>S.No.</td>
-      <td>Movie</td>
-      <td>Director</td>
-      <td>Year</td>
-      <td>Tomatometer</td>
-    </tr>
-  </table>
-</div> -->
   {% for m in data %}
 
-  <!-- <div class="media">
-    <div class="media-left">
-      <a href="#">
-        <img class="media-object" src= "{% static "" %}movies/{{m.pk}}.jpg" alt={{m.title}} height="150px">
-      </a>
-    </div>
-    <div class="media-body">
-      <h4 class="media-heading">{{m.title}}</h4>
-      <div>
-        <div style="display:inline">
-      <p>Directed by: {{m.director}}<p>
-      <p>Released year: {{m.year}}</p>
-      <p>Genre: {{m.genre}}</p>
-      <p>tomatometer: {{m.tomatometer}}</p>
-      <p>Imdb Rating: {{m.imdb_rating}}</p>
-        {% if m.seen_status %}
-        <button style="display:inline;" id="btn-{{m.pk}}" type="button" class="seen-status btn btn-success">Seen</button>
-        {% else %}
-        <button style="display:inline;" id="btn-{{m.pk}}" type="button" class="seen-status btn btn-warning">Not Seen</button>
-        {% endif%}
-      </div>
-      </div>
-    </div>
-  </div> -->
-
-
   <div class="panel panel-default" style="display:inline-block;width:35%">
-  <table class="table">
+  <table id="mov_{{m.pk}}" class="table">
     <tr>
       <td rowspan="5"><img class="media-object" src= "{% static "" %}movies/{{m.pk}}.jpg" alt={{m.title}} height="220px"></td>
-        <th colspan="2">{{m.title}}</th>
+        <th id="mov_title_{{m.pk}}" colspan="2">{{m.title}}</th>
       </tr>
         <tr>
-          <td colspan="2">{{m.director}}</td>
+          <td id="mov_director_{{m.pk}}" colspan="2">{{m.director}}</td>
         </tr>
         <tr>
-          <td colspan="2">{{m.year}}</td>
+          <td id="mov_year_{{m.pk}}" colspan="2">{{m.year}}</td>
         </tr>
         <tr>
-          <td colspan="2">Tomato: {{m.tomatometer}}</td>
+          <td id="mov_tomato_{{m.pk}}" colspan="2">Tomato: {{m.tomatometer}}</td>
         </tr>
 
     <tr>
       <td>
         {% if m.seen_status %}
-        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-success"><span class="octicon octicon-check"></span></button>
+        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-success btn-sm"><span class="octicon octicon-check"></span></button>
         {% else %}
-        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-warning"><span class="octicon octicon-lock"></span></button>
+        <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-warning btn-sm"><span class="octicon octicon-lock"></span></button>
         {% endif%}
       </td>
       <td>
         {% if m.bookmarked %}
-        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-success"><span class="octicon octicon-checklist"></span></button>
+        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-success btn-sm"><span class="octicon octicon-checklist"></span></button>
         {% else %}
-        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-warning"><span class="octicon octicon-star"></span></button>
+        <button id="book-{{m.pk}}" type="button" class="book-status btn btn-warning btn-sm"><span class="octicon octicon-star"></span></button>
         {% endif%}
+      </td>
+      <td>
+        <button id="{{m.pk}}" class="edit-btn btn btn-primary btn-sm" type="button" name="button" data-toggle="modal" data-target="#editModal"><span class="octicon octicon-pencil"></span></button>
+
       </td>
     </tr>
   </table>
 </div>
 
-
-  <!-- <h3>{{m.title}}</h3>
-  <p>{{m.pk}}.jpg</p>
-  <p>{{m.director}}</p>
-  <p>Year:{{m.year}}</p>
-  <p>Tomatometer:{{m.tomatometer}}</p>
-  <img src= "{% static "" %}movies/{{m.pk}}.jpg" height="250px"> -->
   {% endfor %}
 
-
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Edit Info</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <tr>
+              <td>
+          <img id="editModalImg" class="media-object" src="" alt="" height="350px">
+        </td>
+        <td>
+          <form>
+  <div class="form-group">
+    <input type="text" class="form-control" id="editTitle" placeholder="Title">
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" id="editDirector" placeholder="Director">
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" id="editYear" placeholder="Year">
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" id="editTomato" placeholder="Tomato">
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" id="editImdb" placeholder="Imdb">
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" id="editUrl" placeholder="Poster Url">
+  </div>
+</form>
+        </td>
+      </tr>
+        </table>
+        </div>
+        <div class="modal-footer">
+          <p class="pk" style="display:none;"></p>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="submitChanges" type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block script %}
 <script type="text/javascript">
   $(document).ready(function(){
     $(document).on('click','.seen-status',function(){
-      console.log($(this).attr('id'));
+      // console.log($(this).attr('id'));
       $.post('http://127.0.0.1:8000/change_seen_status/',
       {id : $(this).attr('id'),
       csrfmiddlewaretoken : '{{csrf_token}}' });
@@ -106,7 +114,7 @@
       }
       });
     $(document).on('click','.book-status',function(){
-      console.log($(this).attr('id'));
+      // console.log($(this).attr('id'));
       $.post('http://127.0.0.1:8000/change_book_status/',
       {id : $(this).attr('id'),
       csrfmiddlewaretoken : '{{csrf_token}}' });
@@ -118,6 +126,53 @@
         $(this).html('<span class="octicon octicon-checklist"></span>');
       }
       });
+    $(document).on('click','.edit-btn',function(){
+      var id = $(this).attr('id');
+      $('.pk').attr('id',id);
+      // console.log(id);
+      var address = "http://127.0.0.1:8000/static/movies/"+id+".jpg";
+
+      $('#editModalImg').attr('src',address);
+      var title = $(this).parent().parent().parent().children('tr').children('th').text();
+      $('#editTitle').val(title);
+      var director = $(this).parent().parent().parent().children('tr').eq(1).children('td').text();
+      // console.log(director);
+      $('#editDirector').val(director);
+      var year = $(this).parent().parent().parent().children('tr').eq(2).children('td').text();
+      var tomato = $(this).parent().parent().parent().children('tr').eq(3).children('td').text().split(": ")[1];
+      // var imdb = $(this).parent().parent().parent().children('tr').eq(4).children('td').text();
+      $('#editYear').val(year);
+      $('#editTomato').val(tomato);
+
+      // $('#editImdb').val(imdb);
+
+    });
+    $(document).on('click','#submitChanges',function(){
+      var id = $('.pk').attr('id');
+      var title = $('#editTitle').val();
+      var director = $('#editDirector').val();
+      var year = $('#editYear').val();
+      var tomato = $('#editTomato').val();
+
+      // console.log($('.pk').attr('id'));
+      $.post('http://127.0.0.1:8000/change_info/',
+    {id: id,
+     title: title,
+     director: director,
+     year: year,
+     tomato: tomato,
+     csrfmiddlewaretoken: "{{csrf_token}}"
+   });
+   var tab_id = "#mov_"+id;
+   $('#mov_title_'+id).text(title);
+   $('#mov_director_'+id).text(director);
+   $('#mov_year_'+id).text(year);
+   $('#mov_tomato_'+id).text(tomato);
+  //  $(tab_id).children().eq(1).children('.mov_director').val(director);
+  //  $(tab_id).children().eq(2).children('.mov_year').val(year);
+  //  $(tab_id).children().eq(3).children('.mov_tomato').val(tomato);
+   $('#editModal').modal('toggle');
+    });
 
   });
 </script>

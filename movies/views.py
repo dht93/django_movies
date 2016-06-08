@@ -62,3 +62,18 @@ def add_data(request):
             # m.save()
             print el
     return HttpResponse('Hey')
+
+def change_info(request):
+    id1 = request.POST['id']
+    title = request.POST['title']
+    director = request.POST['director']
+    year = request.POST['year']
+    tomato = request.POST['tomato']
+    # print id1,title,director,year,tomato
+    m = Movie.objects.get(pk=int(id1))
+    m.title = title
+    m.director = director
+    m.year = int(year)
+    m.tomatometer = int(tomato)
+    m.save()
+    return HttpResponse('Done')
