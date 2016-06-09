@@ -28,7 +28,7 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
     # print data
-    return render(request,'movies/index.html',{'data':data,'current':'home', 'sort_by':m.sort_by})
+    return render(request,'movies/index.html',{'data':data,'current':'home', 'sort_by':m.sort_by, 'search_by':m.search_by})
 
 def bookmarked(request):
     m = Preferences.objects.get(pk=1)
@@ -50,7 +50,7 @@ def bookmarked(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
-    return render(request, 'movies/index.html',{'data':data,'current':'bookmarked', 'sort_by':m.sort_by})
+    return render(request, 'movies/index.html',{'data':data,'current':'bookmarked', 'sort_by':m.sort_by, 'search_by':m.search_by})
 
 def seen_movies(request):
     m = Preferences.objects.get(pk=1)
@@ -72,7 +72,7 @@ def seen_movies(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
-    return render(request, 'movies/index.html',{'data':data,'current':'seen', 'sort_by':m.sort_by})
+    return render(request, 'movies/index.html',{'data':data,'current':'seen', 'sort_by':m.sort_by, 'search_by':m.search_by})
 
 def unseen_movies(request):
     m = Preferences.objects.get(pk=1)
@@ -94,7 +94,7 @@ def unseen_movies(request):
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
         data = paginator.page(paginator.num_pages)
-    return render(request, 'movies/index.html',{'data':data,'current':'unseen', 'sort_by':m.sort_by})
+    return render(request, 'movies/index.html',{'data':data,'current':'unseen', 'sort_by':m.sort_by, 'search_by':m.search_by})
 
 def change_seen_status(request):
     id_to_change = request.POST['id']
@@ -159,7 +159,7 @@ def change_info(request):
 def change_sort_by(request):
     sort_by = request.GET['sort_by']
     current = request.GET['current']
-    print sort_by
+    # print sort_by
     p = Preferences.objects.get(pk=1)
     p.sort_by = sort_by
     p.save()
@@ -172,17 +172,45 @@ def change_sort_by(request):
     else:
         return redirect('unseen_movies')
 
+def change_search_by(request):
+    search_by = request.GET['search_by']
+    current = request.GET['current']
+    s = Preferences.objects.get(pk=1)
+    s.search_by = search_by
+    print s.search_by
+    s.save()
+    if current == "home":
+        return redirect('index')
+    elif current == "bookmarked":
+        return redirect('bookmarked')
+    elif current == "seen":
+        return redirect('seen_movies')
+    else:
+        return redirect('unseen_movies')
+    # return HttpResponse('done')
+
 def search(request):
     query = request.GET['query']
     sort = Preferences.objects.get(pk=1)
-    if sort.sort_by == 'tomato':
-        m = Movie.objects.filter(title__contains=query).order_by('-tomatometer')
-    elif sort.sort_by == 'imdb':
-        m = Movie.objects.filter(title__contains=query).order_by('-imdb_rating')
-    elif sort.sort_by == 'year':
-        m = Movie.objects.filter(title__contains=query).order_by('year')
-    elif sort.sort_by == '-year':
-        m = Movie.objects.filter(title__contains=query).order_by('-year')
+    if sort.search_by =='title':
+        if sort.sort_by == 'tomato':
+            m = Movie.objects.filter(title__contains=query).order_by('-tomatometer')
+        elif sort.sort_by == 'imdb':
+            m = Movie.objects.filter(title__contains=query).order_by('-imdb_rating')
+        elif sort.sort_by == 'year':
+            m = Movie.objects.filter(title__contains=query).order_by('year')
+        elif sort.sort_by == '-year':
+            m = Movie.objects.filter(title__contains=query).order_by('-year')
+
+    else:
+        if sort.sort_by == 'tomato':
+            m = Movie.objects.filter(director__contains=query).order_by('-tomatometer')
+        elif sort.sort_by == 'imdb':
+            m = Movie.objects.filter(director__contains=query).order_by('-imdb_rating')
+        elif sort.sort_by == 'year':
+            m = Movie.objects.filter(director__contains=query).order_by('year')
+        elif sort.sort_by == '-year':
+            m = Movie.objects.filter(director__contains=query).order_by('-year')
 
     # data = serializers.serialize('json',m)
     # return HttpResponse(data, content_type='application/json')

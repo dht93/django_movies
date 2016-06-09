@@ -5,8 +5,8 @@ To-do:
 - [x] Pagination
 - [x] Sort by tomatometer, imdb rating, year
 - [x] Ajax search by title
-- [] Ajax search by director
-- [] Update poster functionality
-- [] Add new movies using the web interface
+- [x] Ajax search by director
+- [ ] Update poster functionality
+- [ ] Add new movies using the web interface
 
 Runs on django 1.9

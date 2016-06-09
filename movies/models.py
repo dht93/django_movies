@@ -18,3 +18,4 @@ class Movie(models.Model):
 
 class Preferences(models.Model):
     sort_by = models.CharField(max_length=10)
+    search_by = models.CharField(max_length=10, default='title')

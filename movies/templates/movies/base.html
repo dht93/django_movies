@@ -44,6 +44,17 @@
                     <li><a href="#">One more separated link</a></li> -->
                   </ul>
                 </li>
+        <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Search By <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li id="#search_by_title"><a href="http://127.0.0.1:8000/change_search_by/?search_by=title&current={{current}}">Title{% if search_by == 'title' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <li id="#search_by_director"><a href="http://127.0.0.1:8000/change_search_by/?search_by=director&current={{current}}">Director{% if search_by == 'director' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <!-- <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">One more separated link</a></li> -->
+                  </ul>
+                </li>
 
       </ul>
       <div class="navbar-form navbar-left">
@@ -61,6 +72,12 @@
   }
 </style>
     {% block body%}
+    {% endblock %}
+
+    {% block modal%}
+    {% endblock %}
+
+    {% block pagination%}
     {% endblock %}
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
