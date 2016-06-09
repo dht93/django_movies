@@ -1,0 +1,45 @@
+{% for m in data %}
+{% load static%}
+<div class="panel panel-default" style="display:inline-block;width:35%">
+<table id="mov_{{m.pk}}" class="table">
+  <tr>
+    <td rowspan="6"><img id="poster-{{m.pk}}" class="mov_poster media-object" src= "{% static "" %}movies/{{m.pk}}.jpg" alt={{m.title}} height="250px"></td>
+      <th id="mov_title_{{m.pk}}" colspan="2">{{m.title}}</th>
+    </tr>
+      <tr>
+        <td id="mov_director_{{m.pk}}" colspan="2">{{m.director}}</td>
+      </tr>
+      <tr>
+        <td id="mov_year_{{m.pk}}" colspan="2">{{m.year}}</td>
+      </tr>
+      <tr>
+        <td id="mov_tomato_{{m.pk}}" colspan="2">Tomato: {{m.tomatometer}}</td>
+      </tr>
+      <tr>
+        <td id="mov_imdb_{{m.pk}}" colspan="2">Imdb: {{m.imdb_rating}}</td>
+      </tr>
+
+  <tr>
+    <td>
+      {% if m.seen_status %}
+      <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-success btn-sm"><span class="octicon octicon-check"></span></button>
+      {% else %}
+      <button id="btn-{{m.pk}}" type="button" class="seen-status btn btn-warning btn-sm"><span class="octicon octicon-lock"></span></button>
+      {% endif%}
+    </td>
+    <td>
+      {% if m.bookmarked %}
+      <button id="book-{{m.pk}}" type="button" class="book-status btn btn-success btn-sm"><span class="octicon octicon-checklist"></span></button>
+      {% else %}
+      <button id="book-{{m.pk}}" type="button" class="book-status btn btn-warning btn-sm"><span class="octicon octicon-star"></span></button>
+      {% endif%}
+    </td>
+    <td>
+      <button id="{{m.pk}}" class="edit-btn btn btn-primary btn-sm" type="button" name="button" data-toggle="modal" data-target="#editModal"><span class="octicon octicon-pencil"></span></button>
+
+    </td>
+  </tr>
+</table>
+</div>
+
+{% endfor %}

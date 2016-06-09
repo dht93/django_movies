@@ -3,6 +3,7 @@ from .models import Movie, Preferences
 import sqlite3
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core import serializers
 
 def index(request):
     m = Preferences.objects.get(pk=1)
@@ -11,6 +12,8 @@ def index(request):
         data_objs = Movie.objects.all().order_by('-imdb_rating')
     elif m.sort_by == "year":
         data_objs = Movie.objects.all().order_by('year')
+    elif m.sort_by == "-year":
+        data_objs = Movie.objects.all().order_by('-year')
     else:
         data_objs = Movie.objects.all().order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
@@ -30,9 +33,11 @@ def index(request):
 def bookmarked(request):
     m = Preferences.objects.get(pk=1)
     if m.sort_by == "imdb":
-        data_objs = Movie.objects.filter(bookmarked = True).order_by('-imdb')
+        data_objs = Movie.objects.filter(bookmarked = True).order_by('-imdb_rating')
     elif m.sort_by == "year":
         data_objs = Movie.objects.filter(bookmarked = True).order_by('year')
+    elif m.sort_by == "-year":
+        data_objs = Movie.objects.filter(bookmarked = True).order_by('-year')
     else:
         data_objs = Movie.objects.filter(bookmarked = True).order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
@@ -50,9 +55,11 @@ def bookmarked(request):
 def seen_movies(request):
     m = Preferences.objects.get(pk=1)
     if m.sort_by == "imdb":
-        data_objs = Movie.objects.filter(seen_status = True).order_by('-imdb')
+        data_objs = Movie.objects.filter(seen_status = True).order_by('-imdb_rating')
     elif m.sort_by == "year":
         data_objs = Movie.objects.filter(seen_status = True).order_by('year')
+    elif m.sort_by == "-year":
+        data_objs = Movie.objects.filter(seen_status = True).order_by('-year')
     else:
         data_objs = Movie.objects.filter(seen_status = True).order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
@@ -70,9 +77,11 @@ def seen_movies(request):
 def unseen_movies(request):
     m = Preferences.objects.get(pk=1)
     if m.sort_by == "imdb":
-        data_objs = Movie.objects.filter(seen_status = False).order_by('-imdb')
+        data_objs = Movie.objects.filter(seen_status = False).order_by('-imdb_rating')
     elif m.sort_by == "year":
         data_objs = Movie.objects.filter(seen_status = False).order_by('year')
+    elif m.sort_by == "-year":
+        data_objs = Movie.objects.filter(seen_status = False).order_by('-year')
     else:
         data_objs = Movie.objects.filter(seen_status = False).order_by('-tomatometer')
     paginator = Paginator(data_objs, 20)
@@ -149,8 +158,32 @@ def change_info(request):
 
 def change_sort_by(request):
     sort_by = request.GET['sort_by']
+    current = request.GET['current']
     print sort_by
     p = Preferences.objects.get(pk=1)
     p.sort_by = sort_by
     p.save()
-    return redirect('index')
+    if current == "home":
+        return redirect('index')
+    elif current == "bookmarked":
+        return redirect('bookmarked')
+    elif current == "seen":
+        return redirect('seen_movies')
+    else:
+        return redirect('unseen_movies')
+
+def search(request):
+    query = request.GET['query']
+    sort = Preferences.objects.get(pk=1)
+    if sort.sort_by == 'tomato':
+        m = Movie.objects.filter(title__contains=query).order_by('-tomatometer')
+    elif sort.sort_by == 'imdb':
+        m = Movie.objects.filter(title__contains=query).order_by('-imdb_rating')
+    elif sort.sort_by == 'year':
+        m = Movie.objects.filter(title__contains=query).order_by('year')
+    elif sort.sort_by == '-year':
+        m = Movie.objects.filter(title__contains=query).order_by('-year')
+
+    # data = serializers.serialize('json',m)
+    # return HttpResponse(data, content_type='application/json')
+    return render(request,'movies/search_template.html', {'data':m})

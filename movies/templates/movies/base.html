@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>{{data.number}}
+  <meta http-equiv="Cache-control" content="public">
+  <title>DT's Films
 </title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 {% load static%}
@@ -20,7 +21,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'index' %}">DT's Movies</a>
+      <a class="navbar-brand" href="{% url 'index' %}">DT's Films</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -33,9 +34,10 @@
         <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort By <span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=tomato">Tomato{% if sort_by == 'tomato' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
-                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=imdb">Imdb{% if sort_by == 'imdb' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
-                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=year">Year{% if sort_by == 'year' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=tomato&current={{current}}">Tomato{% if sort_by == 'tomato' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=imdb&current={{current}}">Imdb{% if sort_by == 'imdb' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=year&current={{current}}">Year <span class="octicon octicon-arrow-up"></span>{% if sort_by == 'year' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
+                    <li><a href="http://127.0.0.1:8000/change_sort_by/?sort_by=-year&current={{current}}">Year <span class="octicon octicon-arrow-down"></span>{% if sort_by == '-year' %}&nbsp;<span class="octicon octicon-check"></span>{% endif %}</a></li>
                     <!-- <li role="separator" class="divider"></li>
                     <li><a href="#">Separated link</a></li>
                     <li role="separator" class="divider"></li>
@@ -44,6 +46,12 @@
                 </li>
 
       </ul>
+      <div class="navbar-form navbar-left">
+        <div class="form-group">
+          <input id="search_input" type="text" class="form-control" placeholder="Search">
+        </div>
+        <button id="search" class="btn btn-primary">Submit</button>
+      </div>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -78,32 +86,6 @@
     </span>
 </div> -->
 
-<nav align="center">
-  <ul class="pagination">
 
-      {% if data.has_previous %}
-      <li>
-          <a href="?page={{ data.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-      </li>
-      {% endif %}
-      <!-- <a href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a> -->
-      {% for page in data.paginator.page_range %}
-      {% if page == data.number%}
-      <li class="active"><a href="#">{{page}}</a></li>
-      {% else%}
-      <li><a href="?page={{page}}">{{page}}</a></li>
-      {% endif %}
-      {% endfor %}
-
-    {% if data.has_next %}
-    <li>
-        <a href="?page={{ data.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-        </li>
-    {% endif %}
-
-  </ul>
-</nav>
 </body>
 </html>
